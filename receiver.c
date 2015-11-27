@@ -64,18 +64,21 @@ int main(int argc, char **argv)
 	
 
 	clientLen = sizeof(clientAddr);
-	if ((clientSock = accept(servSock, (struct sockaddr *) &clientAddr, 
-					&clientLen)) < 0)
-		die("accept() failed");
 
 	for (;;)
 	{
 		int i;
 
+		memset(encrypted_buffer, 0, MAXSIZE*sizeof(int));
+
+		if ((clientSock = accept(servSock, (struct sockaddr *) &clientAddr, 
+						&clientLen)) < 0)
+			die("accept() failed");
+
 		if ((recvMsgSize = recv(clientSock, encrypted_buffer, MAXSIZE*sizeof(int), 0)) < 0)
 			die("recv() failed");
 
-		for (i = 0; i < recvMsgSize; i++) {
+		for (i = 0; i <= recvMsgSize; i++) {
 			encrypted_buffer[i] *= key;
 		}
 
@@ -87,9 +90,10 @@ int main(int argc, char **argv)
 		for (i = 0; i < recvMsgSize; i++) {
 			putchar(encrypted_buffer[i] / key);
 		}
+		
+		close(clientSock);
 
 	}
 	
-	close(clientSock);
 	return 0;
 }

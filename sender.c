@@ -21,6 +21,8 @@ int main(int argc, char **argv)
 	struct sockaddr_in servAddr; /* Echo server address */
 	unsigned short servPort;     /* Echo server port */
 	int key;
+	int i = 0;
+	int size;
 
 	int encrypted_buffer[MAXSIZE];
 	char buffer[MAXSIZE];
@@ -57,32 +59,29 @@ int main(int argc, char **argv)
 	if (connect(sock, (struct sockaddr *) &servAddr, sizeof(servAddr)) < 0)
 		DieWithError("connect() failed");
 
-	while(fgets(buffer, MAXSIZE, stdin) != NULL) {
-		int i = 0;
-		int size;
+	fgets(buffer, MAXSIZE, stdin);
 
-		memset(encrypted_buffer, '\0', MAXSIZE);
+	memset(encrypted_buffer, '\0', MAXSIZE);
 
-		size = strlen(buffer);
+	size = strlen(buffer);
 
-		while (i < size) {
-			encrypted_buffer[i] = ((int)buffer[i]) * key;
-			i++;
-		}
-
-
-		send(sock, encrypted_buffer, size * sizeof(int), 0);
-
-		size = recv(sock, encrypted_buffer, MAXSIZE, 0);
-
-		i = 0;
-
-		while (i <= size) {
-			encrypted_buffer[i++] /= key;
-		}
-
-		send(sock, encrypted_buffer, size, 0);
+	while (i < size) {
+		encrypted_buffer[i] = ((int)buffer[i]) * key;
+		i++;
 	}
+
+
+	send(sock, encrypted_buffer, size * sizeof(int), 0);
+
+	size = recv(sock, encrypted_buffer, MAXSIZE, 0);
+
+	i = 0;
+
+	while (i <= size) {
+		encrypted_buffer[i++] /= key;
+	}
+
+	send(sock, encrypted_buffer, size, 0);
 
 	close(sock);
 	return(0);
