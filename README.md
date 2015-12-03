@@ -26,3 +26,5 @@ To start the receiver:
 To start the sender:
 
     $ ./sender <host> <port> <key>
+
+The sender accepts exactly one line of input from stdout, sends it, and exits.
