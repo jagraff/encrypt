@@ -20,11 +20,11 @@ int main(int argc, char **argv)
 	int sock;                        /* Socket descriptor */
 	struct sockaddr_in servAddr; /* Echo server address */
 	unsigned short servPort;     /* Echo server port */
-	int key;
+	long key;
 	int i = 0;
 	int size;
 
-	int encrypted_buffer[MAXSIZE];
+	long encrypted_buffer[MAXSIZE];
 	char buffer[MAXSIZE];
 
 
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 
 	servPort = atoi(argv[2]);
 
-	key = atoi(argv[3]);
+	key = atol(argv[3]);
 
 	if ((sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
 		DieWithError("socket() failed");
@@ -66,12 +66,12 @@ int main(int argc, char **argv)
 	size = strlen(buffer);
 
 	while (i < size) {
-		encrypted_buffer[i] = ((int)buffer[i]) * key;
+		encrypted_buffer[i] = ((long)buffer[i]) * key;
 		i++;
 	}
 
 
-	send(sock, encrypted_buffer, size * sizeof(int), 0);
+	send(sock, encrypted_buffer, size * sizeof(long), 0);
 
 	size = recv(sock, encrypted_buffer, MAXSIZE, 0);
 
