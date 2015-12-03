@@ -9,7 +9,7 @@ This is a simple, proof of concept implementation of [three-pass protocol](https
 5. Sender divides every long of message by its key
 6. Sender sends message back to receiver
 7. Receiver divides every long of message by its key. 
-8. The message is now in plaintext at the receivers end.
+8. The message is now in plaintext at the receiver's end.
 
 ## compiling
 
