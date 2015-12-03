@@ -27,9 +27,9 @@ int main(int argc, char **argv)
 	struct sockaddr_in servAddr; /* Local address */
 	struct sockaddr_in clientAddr; /* Client address */
 	int recvMsgSize;
-	int key;
+	long key;
 
-	int encrypted_buffer[MAXSIZE];
+	long encrypted_buffer[MAXSIZE];
 
 
 	if (argc != 3)
@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 
 	servPort = atoi(argv[1]);
 
-	key = atoi(argv[2]);
+	key = atol(argv[2]);
 
 
 	if ((servSock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 	{
 		int i;
 
-		memset(encrypted_buffer, 0, MAXSIZE*sizeof(int));
+		memset(encrypted_buffer, 0, MAXSIZE*sizeof(long));
 
 		if ((clientSock = accept(servSock, (struct sockaddr *) &clientAddr, 
 						&clientLen)) < 0)
@@ -82,9 +82,9 @@ int main(int argc, char **argv)
 			encrypted_buffer[i] *= key;
 		}
 
-		send(clientSock, encrypted_buffer, recvMsgSize*sizeof(int), 0);
+		send(clientSock, encrypted_buffer, recvMsgSize*sizeof(long), 0);
 
-		if ((recvMsgSize = recv(clientSock, encrypted_buffer, MAXSIZE*sizeof(int), 0)) < 0)
+		if ((recvMsgSize = recv(clientSock, encrypted_buffer, MAXSIZE*sizeof(long), 0)) < 0)
 			die("recv() failed");
 
 		for (i = 0; i < recvMsgSize; i++) {
